@@ -1,0 +1,275 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.np</groupId>
+  <artifactId>trackSafeServer</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>trackSafeServer</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java-version>1.6</java-version>
+    <restexpress.version>0.9.4</restexpress.version>
+	<spring.version>3.2.3.RELEASE</spring.version>
+	<org.slf4j-version>1.5.10</org.slf4j-version>
+	<maven.test.skip>true</maven.test.skip>
+  </properties>
+
+  <scm>
+		<connection>scm:svn:http://subversion.quova.com/svn/hylocal/ad-engine/trunk/</connection>
+		<developerConnection>scm:svn:http://subversion.quova.com/svn/hylocal/ad-engine/trunk/</developerConnection>
+		<url>http://subversion.quova.com/svn/hylocal/ad-engine/trunk/</url>
+  </scm>
+	
+  <dependencies>
+    
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.7</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.strategicgains</groupId>
+			<artifactId>RestExpress</artifactId>
+			<version>${restexpress.version}</version>
+		</dependency>
+		
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		
+		<!-- DB Connectors -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.6</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+		</dependency>
+		
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${org.slf4j-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${org.slf4j-version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${org.slf4j-version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.mail</groupId>
+					<artifactId>mail</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.jms</groupId>
+					<artifactId>jms</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jdmk</groupId>
+					<artifactId>jmxtools</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jmx</groupId>
+					<artifactId>jmxri</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		
+		<!-- Utils -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.3</version>
+		</dependency>
+		
+  </dependencies>
+  
+  <repositories>
+	    
+	    <repository>
+           <id>snapshots-repo</id>
+           <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+           <releases><enabled>false</enabled></releases>
+           <snapshots><enabled>true</enabled></snapshots>
+        </repository>
+	    <!--  repository>
+	      <releases>
+	        <enabled>true</enabled>
+	        <updatePolicy>always</updatePolicy>
+	        <checksumPolicy>warn</checksumPolicy>
+	      </releases>
+	      <snapshots>
+	        <enabled>true</enabled>
+	        <updatePolicy>daily</updatePolicy>
+	        <checksumPolicy>fail</checksumPolicy>
+	      </snapshots>
+	      <id>codehausSnapshots</id>
+	      <name>Codehaus Snapshots</name>
+	      <url>http://snapshots.maven.codehaus.org/maven2</url>
+	      <layout>default</layout>
+	    </repository>
+	    <repository>
+		    <id>repository.springsource.snapshot</id>
+		    <name>SpringSource Snapshot Repository</name>
+		    <url>http://repo.springsource.org/snapshot</url>
+		</repository>
+		<repository>
+		    <id>repository.springsource.release</id>
+		    <name>SpringSource GA Repository</name>
+		    <url>http://repo.springsource.org/release</url>
+		</repository>
+		<repository>
+			<id>JBoss repository</id>
+			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
+	      </repository -->
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>central</id>
+      <name>Central Repository</name>
+      <url>http://repo.maven.apache.org/maven2</url>
+      <layout>default</layout>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+    </pluginRepository>
+  </pluginRepositories>
+	
+	
+  <build>
+  
+		<plugins>
+		
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>false</addClasspath>
+							<mainClass>com.np.tracksserver.TrackServer</mainClass>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+						<manifestEntries>
+	                 		 	<mainClass>com.np.tracksserver.TrackServer</mainClass>
+								<Svn-Revision-Number>${buildNumber}</Svn-Revision-Number>
+								<Timestamp>${timestamp}</Timestamp>
+								<Build-Scm-Branch>${scmBranch}</Build-Scm-Branch>
+						     </manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-shade-plugin</artifactId>
+		        <version>2.0</version>
+		        <configuration>
+		        	<transformers>
+	                	<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+			           		 <resource>META-INF/spring.handlers</resource>
+			          	</transformer>
+			          	<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+			          		 <resource>META-INF/spring.schemas</resource>
+			          	</transformer>
+			          	<transformer implementation="org.apache.maven.plugins.shade.resource.XmlAppendingTransformer">
+                                <resource>applicationContext.xml</resource>
+                        </transformer>
+	              	</transformers>
+	              	<shadedArtifactAttached>false</shadedArtifactAttached>
+					<shadedClassifierName>with-dependencies</shadedClassifierName>
+					
+		        </configuration>
+		        <executions>
+		          <execution>
+		            <phase>package</phase>
+		            <goals>
+		              <goal>shade</goal>
+		            </goals>
+		          </execution>
+		        </executions>
+	      </plugin>
+	      
+	      <plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.1</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<doCheck>false</doCheck>
+					<doUpdate>false</doUpdate>
+					<timestampFormat>{0,date,yyyy-MM-dd HH:mm:ss Z}</timestampFormat>
+				</configuration>
+			</plugin>
+      
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.8.1</version>
+                <configuration>
+                    <skipTests>${maven.test.skip}</skipTests>
+                    <systemPropertyVariables>
+                        <propertyName>propertyValue</propertyName>
+                        <ats.env>test</ats.env>
+                    </systemPropertyVariables>
+                </configuration>
+			</plugin>
+			
+		</plugins>
+
+	</build>
+</project>
