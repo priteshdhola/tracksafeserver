@@ -1,8 +1,11 @@
 package com.np.trackserver.services.beans;
 
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+@XmlRootElement(name="responseStatus")
 public class ResponseStatus {
 	private Integer statusCode;
 	private String subCode;
