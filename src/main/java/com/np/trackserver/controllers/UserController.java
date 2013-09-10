@@ -1,4 +1,4 @@
-package com.np.tracksserver.controllers;
+package com.np.trackserver.controllers;
 
 import org.springframework.stereotype.Component;
 

@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.np.trackserver.controllers.ActivityController;
 import com.np.trackserver.utils.SpringPropertyUtils;
-import com.np.tracksserver.controllers.ActivityController;
 import com.strategicgains.restexpress.Format;
 import com.strategicgains.restexpress.RestExpress;
 
