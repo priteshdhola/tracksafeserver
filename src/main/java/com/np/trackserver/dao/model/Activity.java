@@ -1,23 +1,41 @@
-package com.np.trackserver.services.beans;
+package com.np.trackserver.dao.model;
 
 import java.util.Date;
-import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Activity model which maps to database Activity object
  * @author npatel
  *
  */
+@Entity
+@Table(name="activity")
 public class Activity {
 
+		@Id
+		@GeneratedValue(strategy = GenerationType.AUTO)
 		private int id;
-		private String name;
-		private Date startDate;
-		private short type;
-		private Date createdDate;
-		private Date modifiedDate;
 		
-		private List<User> users;
+		@Column(name="name")
+		private String name;
+		
+		@Column(name="start_date")
+		private Date startDate;
+		
+		@Column(name="type")
+		private Integer type;
+		
+		@Column(name="created_date")
+		private Date createdDate;
+		
+		@Column(name="modified_date")
+		private Date modifiedDate;
 		
 		public Activity(){
 			
@@ -41,10 +59,10 @@ public class Activity {
 		public void setStartDate(Date startDate) {
 			this.startDate = startDate;
 		}
-		public short getType() {
+		public Integer getType() {
 			return type;
 		}
-		public void setType(short type) {
+		public void setType(Integer type) {
 			this.type = type;
 		}
 		public Date getCreatedDate() {
@@ -58,12 +76,6 @@ public class Activity {
 		}
 		public void setModifiedDate(Date modifiedDate) {
 			this.modifiedDate = modifiedDate;
-		}
-		public List<User> getUsers() {
-			return users;
-		}
-		public void setUsers(List<User> users) {
-			this.users = users;
 		}
 		
 }

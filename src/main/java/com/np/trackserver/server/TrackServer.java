@@ -8,6 +8,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.np.trackserver.utils.SpringPropertyUtils;
+import com.np.tracksserver.controllers.ActivityController;
+import com.strategicgains.restexpress.Format;
 import com.strategicgains.restexpress.RestExpress;
 
 /**
@@ -24,6 +26,9 @@ public class TrackServer implements InitializingBean {
 	
 	private static ApplicationContext appContext;
 	
+	@Autowired
+	ActivityController activityController;
+	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		
@@ -38,7 +43,8 @@ public class TrackServer implements InitializingBean {
 	private void startServer() {
 	
 		restServer.setName("Track server");
-		restServer.setDefaultFormat(SpringPropertyUtils.getProperty("track_server.default_format"));
+		restServer.setDefaultFormat(Format.JSON);
+		
 		
 		//Server settings
 		restServer.setExecutorThreadCount(SpringPropertyUtils.getIntegerProperty("track_server.executorthread.count"));
@@ -118,17 +124,16 @@ public class TrackServer implements InitializingBean {
 	
     private void defineRoutes() {
 	
-    	restServer.uri("/v1/events.{format}", null)
-				.action("createEvent", HttpMethod.POST);
+    	restServer.uri("/v1/activities.{format}", activityController)
+				.action("createActivity", HttpMethod.POST);
     	
-    	restServer.uri("/v1/events.{format}", null)
-				.action("getEvents", HttpMethod.GET);
+    	restServer.uri("/v1/activities.{format}", activityController)
+				.action("getActivities", HttpMethod.GET);
     	
-    	restServer.uri("/v1/events/{eventId}.{format}", null)
-				.action("updateEvent", HttpMethod.PUT);
-		
-    	restServer.uri("/v1/events/{eventId}.{format}", null)
-				.action("getEvent", HttpMethod.GET);
+    	restServer.uri("/v1/activities/{activityId}.{format}", activityController)
+				.action("updateActivity", HttpMethod.PUT)
+				.action("getActivity", HttpMethod.GET)
+				.name(Constants.ACTIVITY_READ_ROUTE);
     	
 	
     }

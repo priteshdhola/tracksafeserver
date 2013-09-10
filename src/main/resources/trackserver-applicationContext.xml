@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd">
 	
 	<context:annotation-config />
-	
+	<tx:annotation-driven />
 	<import resource="classpath:datasource-context.xml"/>
+	<import resource="classpath:springmvc-resteasy.xml"/>
+	<import resource="classpath:root-context.xml"/>
 	
-	<bean id="applicationProperties" class="com.np.trackserver.utils.SpringPropertyUtils" >
-        <property name="location" value="classpath:/track-server-${np.env}.properties"/>
-        <property name="ignoreUnresolvablePlaceholders" value="true"/>
-    </bean>	
-    
+	<context:component-scan base-package="com.np.trackserver" />
+	
 	<bean id="trackServer" class="com.np.trackserver.server.TrackServer"/>
 	<bean id="trackServerApplicationContext" class="com.np.trackserver.server.TrackServerApplicationContext" />
 	<bean id="restServer" class="com.strategicgains.restexpress.RestExpress"/>
 	
-	<context:component-scan base-package="com.np.trackserver" />
+	<!-- controllers -->
+	<bean id="activityController" class="com.np.tracksserver.controllers.ActivityController"/>
 	
 </beans>

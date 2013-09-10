@@ -1,11 +1,14 @@
 package com.np.trackserver.services.beans;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * User model which maps to database User object
  * @author npatel
  *
  */
-public class User {
+@XmlRootElement(name="userData")
+public class UserData {
 	
 	private int id;
 	private String userName;
@@ -16,7 +19,7 @@ public class User {
 	private short height;
 	private short sex;
 	
-	public User() {
+	public UserData() {
 		
 	}
 	

@@ -1,8 +1,16 @@
 package com.np.trackserver.dao.impl;
 
-import com.np.trackserver.dao.UserDAO;
+import org.springframework.stereotype.Repository;
 
-public class UserDAOImpl extends AbstractDAOImpl implements UserDAO {
+import com.np.trackserver.dao.UserDAO;
+import com.np.trackserver.dao.model.User;
+
+@Repository
+public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
+
+	protected UserDAOImpl() {
+		super(User.class);
+	}
 
 	
 	
