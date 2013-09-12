@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name="userData")
 public class UserData {
 	
-	private int id;
+	private Integer id;
 	private String userName;
 	private String email;
 	private String password;
@@ -23,10 +23,10 @@ public class UserData {
 		
 	}
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getUserName() {

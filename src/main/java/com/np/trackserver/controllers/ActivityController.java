@@ -1,6 +1,7 @@
 package com.np.trackserver.controllers;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Controller;
 
 import com.np.trackserver.services.ActivityService;
 import com.np.trackserver.services.beans.ActivityData;
+import com.np.trackserver.services.beans.ActivityDataPage;
 
 @Controller
 @Path("/activities")
@@ -31,15 +33,19 @@ public class ActivityController extends BaseController {
 	@Autowired
 	ActivityService activityService;
 	
+	private final int temp_user_id = 1;
+	
 	@POST
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public Response createActivity(@Context UriInfo uri, ActivityData activityData) {
+	public Response createActivity(@Context UriInfo uri, @Context Request req, @Context Response res, ActivityData activityData) {
 		
 		Throwable t = null;
 		Object o = null;
 		URI u = null;
 		Integer id = null;
+		
+		activityData.setCreatedBy(temp_user_id);
 		
 		try{
 			id = activityService.createActivity(activityData);
@@ -57,13 +63,10 @@ public class ActivityController extends BaseController {
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Path("/{id}")
-	public Response getActivity(@PathParam("id") String id) {
+	public Response getActivity(@Context Request req, @Context Response res, @PathParam("id") String id) {
 		
 		Throwable t = null;
 		Object o = null;
-		
-		//TODO: check for valid userid and advertiserId should have been done before coming here 
-		
 		try {
 			
 			ActivityData activity = activityService.getActivity(Integer.valueOf(id));
@@ -76,10 +79,32 @@ public class ActivityController extends BaseController {
 		return response;
 		
 	}
-	public void getActivities(Request req, Response res) {
+	
+	@GET
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	public Response getActivities(@Context Request req, @Context Response res) {
+		
+		Throwable t = null;
+		Object o = null;
+		try {
+		
+			List<ActivityData> activityList = activityService.getActivitiesByUserId(temp_user_id);
+			
+			ActivityDataPage page = new ActivityDataPage();
+			page.setActivityList(activityList);
+			o = page;
+			
+		} catch (Exception re) {
+			t = re;
+		}
+		Response response = buildResponse(o, t);
+		return response;
+		
 		
 	}
 	public void updateActivity(Request req, Response res) {
+		
+		
 		
 	}
 }

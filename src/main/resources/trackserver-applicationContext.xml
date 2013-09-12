@@ -21,6 +21,6 @@
 	<bean id="restServer" class="com.strategicgains.restexpress.RestExpress"/>
 	
 	<!-- controllers -->
-	<bean id="activityController" class="com.np.tracksserver.controllers.ActivityController"/>
+	<!--  bean id="activityController" class="com.np.trackserver.controllers.ActivityController"/ -->
 	
 </beans>
