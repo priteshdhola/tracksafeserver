@@ -14,7 +14,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java-version>1.7</java-version>
     <restexpress.version>0.9.5-SNAPSHOT</restexpress.version>
-    <resteasy.version>3.0.4.Final</resteasy.version>
+    <resteasy.version>3.0.2.Final</resteasy.version>
 	<spring.version>3.2.3.RELEASE</spring.version>
 	<hibernate.version>4.1.0.Final</hibernate.version>
 	<org.slf4j-version>1.5.10</org.slf4j-version>
@@ -22,9 +22,9 @@
   </properties>
 
   <scm>
-		<connection>scm:svn:http://subversion.quova.com/svn/hylocal/ad-engine/trunk/</connection>
-		<developerConnection>scm:svn:http://subversion.quova.com/svn/hylocal/ad-engine/trunk/</developerConnection>
-		<url>http://subversion.quova.com/svn/hylocal/ad-engine/trunk/</url>
+		<connection>scm:git:https://github.com/priteshdhola/tracksafeserver.git</connection>
+		<developerConnection>scm:git:https://github.com/priteshdhola/tracksafeserver.git</developerConnection>
+		<url>scm:git:https://github.com/priteshdhola/tracksafeserver.git</url>
   </scm>
 	
   <dependencies>
@@ -42,41 +42,31 @@
 		</dependency>
 		
 		<!-- Spring -->
-		<dependency>
+		<!-- dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
+		</dependency -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
+		<!--  dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
 			<version>${spring.version}</version>
-		</dependency>
+		</dependency -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		<dependency>
+		<!-- dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
 			<version>3.0</version>
-		</dependency>
+		</dependency  -->
             
         <!-- RestEasy -->
 		<dependency>
@@ -140,9 +130,10 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<version>1.4</version>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-jdbc</artifactId>
+			<version>7.0.40</version>
+			<!-- scope>provided</scope -->
 		</dependency>
 		
 		<!-- Hibernate -->

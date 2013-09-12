@@ -91,8 +91,9 @@ public abstract class AbstractDAOImpl<T> implements AbstractDAO<T> {
 
 	@Override
 	public List<T> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Session session = sessionFactory.getCurrentSession();
+		return session.createCriteria(entityClass).list();
 	}
 
 	@Override

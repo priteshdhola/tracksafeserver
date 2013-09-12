@@ -20,7 +20,7 @@ public class Activity {
 
 		@Id
 		@GeneratedValue(strategy = GenerationType.AUTO)
-		private int id;
+		private Integer id;
 		
 		@Column(name="name")
 		private String name;
@@ -37,14 +37,17 @@ public class Activity {
 		@Column(name="modified_date")
 		private Date modifiedDate;
 		
+		@Column(name="created_by")
+		private Integer createdBy;
+		
 		public Activity(){
 			
 		}
 		
-		public int getId() {
+		public Integer getId() {
 			return id;
 		}
-		public void setId(int id) {
+		public void setId(Integer id) {
 			this.id = id;
 		}
 		public String getName() {
@@ -77,5 +80,14 @@ public class Activity {
 		public void setModifiedDate(Date modifiedDate) {
 			this.modifiedDate = modifiedDate;
 		}
+
+		public Integer getCreatedBy() {
+			return createdBy;
+		}
+
+		public void setCreatedBy(Integer createdBy) {
+			this.createdBy = createdBy;
+		}
+		
 		
 }

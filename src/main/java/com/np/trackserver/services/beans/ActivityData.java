@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name="activityData")
 public class ActivityData {
 
-		private int id;
+		private Integer id;
 		
 		private String name;
 		
@@ -25,16 +25,18 @@ public class ActivityData {
 		
 		private Date modifiedDate;
 		
+		private Integer createdBy;
+		
 		private List<UserData> users;
 		
 		public ActivityData(){
 			
 		}
 		
-		public int getId() {
+		public Integer getId() {
 			return id;
 		}
-		public void setId(int id) {
+		public void setId(Integer id) {
 			this.id = id;
 		}
 		public String getName() {
@@ -72,6 +74,14 @@ public class ActivityData {
 		}
 		public void setUsers(List<UserData> users) {
 			this.users = users;
+		}
+
+		public Integer getCreatedBy() {
+			return createdBy;
+		}
+
+		public void setCreatedBy(Integer createdBy) {
+			this.createdBy = createdBy;
 		}
 		
 }
