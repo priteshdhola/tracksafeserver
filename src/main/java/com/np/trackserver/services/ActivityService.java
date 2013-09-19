@@ -30,7 +30,7 @@ public class ActivityService {
 	UserActivityDAO userActivityDAO;
 	
 	private ConcurrentMap<Integer, ConcurrentMap<Integer, LocationData>> userActivityLocations = new ConcurrentHashMap<Integer, ConcurrentMap<Integer, LocationData>>();
-	
+
 	@Transactional()
 	public Integer createActivity(ActivityData activity){
 		

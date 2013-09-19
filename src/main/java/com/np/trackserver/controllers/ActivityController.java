@@ -93,7 +93,6 @@ public class ActivityController extends BaseController {
 		try {
 		
 			List<ActivityData> activityList = activityService.getActivitiesByUserId(temp_user_id);
-			
 			ActivityDataList page = new ActivityDataList();
 			page.setActivityList(activityList);
 			o = page;
@@ -108,9 +107,8 @@ public class ActivityController extends BaseController {
 	}
 	public void updateActivity(Request req, Response res) {
 		
-		
-		
 	}
+	
 	@POST
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Path("/{activity_id}")
@@ -153,7 +151,6 @@ public class ActivityController extends BaseController {
 		}
 		Response response = buildResponse(o, t);
 		return response;
-		
 		
 	}
 }
