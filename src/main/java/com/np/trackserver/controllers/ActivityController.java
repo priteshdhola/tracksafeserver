@@ -50,9 +50,11 @@ public class ActivityController extends BaseController {
 		Integer id = null;
 		
 		activityData.setCreatedBy(temp_user_id);
+		UserData user = new UserData();
+		user.setId(temp_user_id);
 		
 		try{
-			id = activityService.createActivity(activityData);
+			id = activityService.createActivity(activityData, user);
 			u = UriBuilder.fromUri(uri.getPath() + "/"+ id).build();
 		
 		} catch (Exception re) {

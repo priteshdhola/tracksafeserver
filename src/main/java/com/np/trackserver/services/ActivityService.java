@@ -15,9 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.np.trackserver.dao.ActivityDAO;
 import com.np.trackserver.dao.UserActivityDAO;
 import com.np.trackserver.dao.model.Activity;
+import com.np.trackserver.dao.model.User;
 import com.np.trackserver.dao.model.UserActivity;
 import com.np.trackserver.services.beans.ActivityData;
 import com.np.trackserver.services.beans.LocationData;
+import com.np.trackserver.services.beans.UserData;
 
 @Service
 
@@ -32,15 +34,26 @@ public class ActivityService {
 	private ConcurrentMap<Integer, ConcurrentMap<Integer, LocationData>> userActivityLocations = new ConcurrentHashMap<Integer, ConcurrentMap<Integer, LocationData>>();
 
 	@Transactional()
-	public Integer createActivity(ActivityData activity){
+	public Integer createActivity(ActivityData activity, UserData user){
 		
+		Date cur = new Date();
 		Activity dbActivity = new Activity();
 		dbActivity.setName(activity.getName());
 		dbActivity.setType(0);
 		dbActivity.setStartDate(activity.getStartDate());
-		dbActivity.setCreatedDate(new Date());
+		dbActivity.setCreatedDate(cur);
 		dbActivity.setCreatedBy(activity.getCreatedBy());
-		activityDAO.save(dbActivity);
+		dbActivity = activityDAO.save(dbActivity);
+		
+		User dbUser = new User();
+		dbUser.setId(user.getId());
+
+		UserActivity ua = new UserActivity();
+		ua.setActivity(dbActivity);
+		ua.setCreatedDate(cur);
+		ua.setModifiedDate(cur);
+		ua.setUser(dbUser);
+		userActivityDAO.save(ua);
 		
 		return dbActivity.getId();
 		
