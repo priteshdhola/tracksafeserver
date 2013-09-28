@@ -32,16 +32,16 @@ public class User {
 	private String password;
 	
 	@Column(name="age")
-	private short age;
+	private Integer age;
 	
 	@Column(name="weight")
-	private short weight;
+	private Integer weight;
 	
 	@Column(name="height")
-	private short height;
+	private Integer height;
 	
 	@Column(name="sex")
-	private short sex;
+	private Integer sex;
 	
 	@Column(name="created_date")
 	private Date createdDate;
@@ -77,28 +77,28 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public short getAge() {
+	public Integer getAge() {
 		return age;
 	}
-	public void setAge(short age) {
+	public void setAge(Integer age) {
 		this.age = age;
 	}
-	public short getWeight() {
+	public Integer getWeight() {
 		return weight;
 	}
-	public void setWeight(short weight) {
+	public void setWeight(Integer weight) {
 		this.weight = weight;
 	}
-	public short getHeight() {
+	public Integer getHeight() {
 		return height;
 	}
-	public void setHeight(short height) {
+	public void setHeight(Integer height) {
 		this.height = height;
 	}
-	public short getSex() {
+	public Integer getSex() {
 		return sex;
 	}
-	public void setSex(short sex) {
+	public void setSex(Integer sex) {
 		this.sex = sex;
 	}
 

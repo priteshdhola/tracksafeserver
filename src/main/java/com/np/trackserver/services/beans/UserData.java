@@ -14,10 +14,10 @@ public class UserData {
 	private String userName;
 	private String email;
 	private String password;
-	private short age;
-	private short weight;
-	private short height;
-	private short sex;
+	private Integer age;
+	private Integer weight;
+	private Integer height;
+	private Integer sex;
 	
 	public UserData() {
 		
@@ -47,28 +47,28 @@ public class UserData {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public short getAge() {
+	public Integer getAge() {
 		return age;
 	}
-	public void setAge(short age) {
+	public void setAge(Integer age) {
 		this.age = age;
 	}
-	public short getWeight() {
+	public Integer getWeight() {
 		return weight;
 	}
-	public void setWeight(short weight) {
+	public void setWeight(Integer weight) {
 		this.weight = weight;
 	}
-	public short getHeight() {
+	public Integer getHeight() {
 		return height;
 	}
-	public void setHeight(short height) {
+	public void setHeight(Integer height) {
 		this.height = height;
 	}
-	public short getSex() {
+	public Integer getSex() {
 		return sex;
 	}
-	public void setSex(short sex) {
+	public void setSex(Integer sex) {
 		this.sex = sex;
 	}
 	
