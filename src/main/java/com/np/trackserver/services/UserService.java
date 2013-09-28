@@ -6,6 +6,8 @@ import com.np.trackserver.dao.UserDAO;
 import com.np.trackserver.dao.model.Activity;
 import com.np.trackserver.dao.model.User;
 import com.np.trackserver.dao.model.UserActivity;
+import com.np.trackserver.exceptions.AuthenticationException;
+import com.np.trackserver.exceptions.NoResourceFoundException;
 import com.np.trackserver.services.beans.ActivityData;
 import com.np.trackserver.services.beans.LocationData;
 import com.np.trackserver.services.beans.UserData;
@@ -25,6 +27,7 @@ public class UserService {
 
     private ConcurrentMap<Integer, ConcurrentMap<Integer, LocationData>> userActivityLocations = new ConcurrentHashMap<Integer, ConcurrentMap<Integer, LocationData>>();
 
+    // Create User
     @Transactional()
     public Integer createUser(UserData user){
 
@@ -39,6 +42,7 @@ public class UserService {
         return dbUser.getId();
     }
 
+    // Update User Information
     @Transactional()
     public void updateUser(UserData updatedUser){
 
@@ -46,7 +50,7 @@ public class UserService {
         dbUser = userDAO.get(updatedUser.getId());
 
         if(null == dbUser){
-            throw new RuntimeException("no user found ");
+            throw new NoResourceFoundException("No Such User Found");
         }
         // First get the db object and only set the values which are not already set.
         if(updatedUser.getAge() != null)
@@ -63,7 +67,25 @@ public class UserService {
         dbUser.setModifiedDate(cur);
 
         userDAO.update(dbUser);
+    }
 
+    @Transactional()
+    public void authenticateUser(UserData user){
+
+        User dbUser = null;
+        dbUser = userDAO.get(user.getId());
+        boolean result = false;
+
+        if(null == dbUser){
+            throw new NoResourceFoundException("No Such User Found");
+        }
+
+        // First get the db object and only set the values which are not already set.
+        if((user.getEmail().equals(dbUser.getEmail())) && (user.getPassword().equals(dbUser.getPassword())))
+            result = true;
+
+        if(result == false)
+            throw new AuthenticationException("Bad Credentials");
     }
 
 }

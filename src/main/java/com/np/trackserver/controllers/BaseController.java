@@ -5,6 +5,8 @@ import java.net.URI;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import com.np.trackserver.exceptions.AuthenticationException;
+import com.np.trackserver.exceptions.NoResourceFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 
@@ -67,11 +69,17 @@ public class BaseController {
 
 		if (e instanceof IllegalArgumentException) {
 			httpStatus = Response.Status.BAD_REQUEST;
-			
+
 		} else if (e instanceof IllegalStateException) {
 			httpStatus = Response.Status.NOT_ACCEPTABLE;
-			
-		} else {
+
+		} else if (e instanceof NoResourceFoundException) {
+            httpStatus = Response.Status.NOT_FOUND;
+
+        } else if (e instanceof AuthenticationException) {
+            httpStatus = Response.Status.UNAUTHORIZED;
+
+        } else{
 			// includes DataStoreException and all other unmapped exceptions
 			logger.error("Platform service server failure: ", e);
 			httpStatus = Response.Status.INTERNAL_SERVER_ERROR;

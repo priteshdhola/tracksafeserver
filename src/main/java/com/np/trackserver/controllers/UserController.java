@@ -64,4 +64,28 @@ public class UserController extends BaseController {
         Response response = buildResponse(o, u, t);
         return response;
     }
+
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Path("/auth")
+    public Response authenticateUser(@Context UriInfo uri, @Context Request req, @Context Response res, UserData userData) {
+
+        Throwable t = null;
+        Object o = null;
+        URI u = null;
+        Integer id = temp_user_id;
+
+        try{
+            userData.setId(id);
+            userService.authenticateUser(userData);
+            u = UriBuilder.fromUri(uri.getPath() + "/"+ id).build();
+
+        } catch (Exception re) {
+            re.printStackTrace();
+            t = re;
+        }
+        Response response = buildResponse(o, u, t);
+        return response;
+    }
 }
