@@ -1,5 +1,6 @@
 package com.np.trackserver.services.beans;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -9,12 +10,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name="locationData")
 public class LocationData {
-
+	
 	private UserData user;
 	private Double latitude;
 	private Double longitude;
 	private Long timestamp;
 	
+	@XmlElement(name="userData")
 	public UserData getUser() {
 		return user;
 	}

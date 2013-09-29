@@ -83,7 +83,6 @@ public class ActivityController extends BaseController {
 		}
 		Response response = buildResponse(o, t);
 		return response;
-		
 	}
 	
 	@GET
@@ -155,4 +154,28 @@ public class ActivityController extends BaseController {
 		return response;
 		
 	}
+	
+	@POST
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Path("/{activity_id}/{user_id}")
+	public Response trackUserLocationForActivity1(@Context Request req, @Context Response res, @PathParam("activity_id") Integer activityId, @PathParam("user_id") Integer userId,
+				LocationData location) {
+		
+		Throwable t = null;
+		Object o = null;
+		try {
+			UserData user = new UserData();
+			user.setUserName("test user :"+new Random().nextInt());
+			user.setId(userId);
+			location.setUser(user);
+			activityService.trackUserLocationForActivity(activityId, location);
+			
+		} catch (Exception re) {
+			t = re;
+		}
+		Response response = buildResponse(o, t);
+		return response;
+		
+	}
+	
 }
