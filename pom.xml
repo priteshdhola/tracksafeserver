@@ -16,9 +16,10 @@
     <restexpress.version>0.9.5-SNAPSHOT</restexpress.version>
     <resteasy.version>3.0.2.Final</resteasy.version>
 	<spring.version>3.2.3.RELEASE</spring.version>
+	<activemq.version>5.7.0</activemq.version>
 	<hibernate.version>4.1.0.Final</hibernate.version>
-	<org.slf4j-version>1.5.10</org.slf4j-version>
-	<maven.test.skip>true</maven.test.skip>
+	<org.slf4j-version>1.6.6</org.slf4j-version>
+	<maven.test.skip>false</maven.test.skip>
   </properties>
 
   <scm>
@@ -67,6 +68,12 @@
 			<artifactId>cglib</artifactId>
 			<version>3.0</version>
 		</dependency  -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jms</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+            
             
         <!-- RestEasy -->
 		<dependency>
@@ -155,6 +162,24 @@
 			<version>1.4</version>
 		</dependency>
             
+        <!-- Active MQ -->
+        <dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-core</artifactId>
+			<version>${activemq.version}</version>
+		</dependency>
+               
+		 <dependency>
+	      <groupId>org.apache.activemq</groupId>
+	      <artifactId>activemq-spring</artifactId>
+	      <version>${activemq.version}</version>
+	    </dependency>
+	    
+	    <dependency>
+			<groupId>org.apache.xbean</groupId>
+			<artifactId>xbean-spring</artifactId>
+			<version>3.14</version>
+		</dependency>
 		
 		<!-- Logging -->
 		<dependency>
@@ -222,7 +247,13 @@
            <releases><enabled>false</enabled></releases>
            <snapshots><enabled>true</enabled></snapshots>
         </repository>
-	    <!--  repository>
+        <!--  repository>
+			<url>http://repo1.maven.org/maven2/</url>
+			<id>central</id>
+			<name>Maven Central</name>
+			<layout>maven2</layout>
+		</repository>
+	    <repository>
 	      <releases>
 	        <enabled>true</enabled>
 	        <updatePolicy>always</updatePolicy>
@@ -252,6 +283,8 @@
 			<id>JBoss repository</id>
 			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
 	      </repository -->
+	  
+		
   </repositories>
 
   <pluginRepositories>

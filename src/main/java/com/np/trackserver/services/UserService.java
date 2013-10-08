@@ -1,29 +1,32 @@
 package com.np.trackserver.services;
 
-import com.np.trackserver.dao.ActivityDAO;
-import com.np.trackserver.dao.UserActivityDAO;
-import com.np.trackserver.dao.UserDAO;
-import com.np.trackserver.dao.model.Activity;
-import com.np.trackserver.dao.model.User;
-import com.np.trackserver.dao.model.UserActivity;
-import com.np.trackserver.exceptions.AuthenticationException;
-import com.np.trackserver.exceptions.NoResourceFoundException;
-import com.np.trackserver.services.beans.ActivityData;
-import com.np.trackserver.services.beans.LocationData;
-import com.np.trackserver.services.beans.UserData;
+import java.util.Date;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+import javax.ws.rs.core.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import com.np.trackserver.dao.UserDAO;
+import com.np.trackserver.dao.model.User;
+import com.np.trackserver.exceptions.AuthenticationException;
+import com.np.trackserver.exceptions.NoResourceFoundException;
+import com.np.trackserver.services.beans.InviteMBean;
+import com.np.trackserver.services.beans.LocationData;
+import com.np.trackserver.services.beans.UserData;
+import com.np.trackserver.services.messaging.ProducerService;
 
 @Service
 public class UserService {
 
     @Autowired
     UserDAO userDAO;
+    
+    @Autowired
+    ProducerService producerService;
 
     private ConcurrentMap<Integer, ConcurrentMap<Integer, LocationData>> userActivityLocations = new ConcurrentHashMap<Integer, ConcurrentMap<Integer, LocationData>>();
 
@@ -86,6 +89,25 @@ public class UserService {
 
         if(result == false)
             throw new AuthenticationException("Bad Credentials");
+    }
+    
+    @Transactional()
+    public void inviteUser(Integer curUserId, String inviteeEmail){
+    	
+    	//TODO: 
+    	//check if user with given email exist
+    	//if yes, send invitation to jms "invite to friend" queue
+    	
+    	//if not, send invitation to jms "invite to app" queue
+        //userData.setId(id);
+    	
+    	InviteMBean i1 = new InviteMBean();
+        i1.setId(curUserId);	
+        i1.setInviteeEmail(inviteeEmail);
+        i1.setInviteeId(2);
+        i1.setInviteMessage("hi add me in your list");
+        
+        producerService.handleMessage(i1);
     }
 
 }

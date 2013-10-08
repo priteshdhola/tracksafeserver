@@ -3,10 +3,17 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jms="http://www.springframework.org/schema/jms"
+	xmlns:amq="http://activemq.apache.org/schema/core"
+
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
 		http://www.springframework.org/schema/tx
-		http://www.springframework.org/schema/tx/spring-tx.xsd">
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/jms 
+		http://www.springframework.org/schema/jms/spring-jms-3.0.xsd
+		http://activemq.apache.org/schema/core 
+		http://activemq.apache.org/schema/core/activemq-core-5.7.0.xsd">
 	
 	<context:annotation-config />
 	<tx:annotation-driven />
@@ -16,11 +23,61 @@
 	
 	<context:component-scan base-package="com.np.trackserver" />
 	
-	<bean id="trackServer" class="com.np.trackserver.server.TrackServer"/>
+	<!--  bean id="trackServer" class="com.np.trackserver.server.TrackServer"/ -->
 	<bean id="trackServerApplicationContext" class="com.np.trackserver.server.TrackServerApplicationContext" />
 	<bean id="restServer" class="com.strategicgains.restexpress.RestExpress"/>
 	
 	<!-- controllers -->
 	<!--  bean id="activityController" class="com.np.trackserver.controllers.ActivityController"/ -->
+	
+	<!-- JMS Active MQ related beans -->
+	
+	<!-- Embeded MQ server -->
+	<amq:broker brokerName="test-broker" start="true" useJmx="false" persistent="false">
+	  <amq:persistenceAdapter>
+	    <amq:amqPersistenceAdapter directory="/Users/npatel/temp/activemq" maxFileLength="32mb"/>
+	  </amq:persistenceAdapter>
+	  <amq:transportConnectors>
+	    <amq:transportConnector uri="tcp://localhost:7171"/>
+	  </amq:transportConnectors>
+	</amq:broker>
+	
+	<!-- Advance VM transport: vm://brokerName?transportOptions 
+		http://activemq.apache.org/vm-transport-reference.html -->
+	<amq:connectionFactory id="amqConnectionFactory" brokerURL="vm://test-broker"/>
+	
+	<!-- bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="vm://embedded?broker.persistent=false"/>
+		<property name="brokerURL" value="tcp://localhost:61616"/>
+	</bean -->
+		
+	<bean id="cachingConnectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+	    <constructor-arg ref="amqConnectionFactory" />     
+	    <property name="exceptionListener" ref="jmsExceptionListener" />
+	    <property name="sessionCacheSize" value="10" />
+	</bean>
+	
+	<!-- a pooling based JMS provider -->
+	<!--  bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
+        <property name="connectionFactory" ref="jmsFactory"/>
+	</bean -->
+	  
+	<bean id="destinationQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="async.destination.queue" />
+	</bean>
+	
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="cachingConnectionFactory" />
+		<property name="defaultDestination" ref="destinationQueue"/>
+	</bean>
+	
+	<!-- DefaultMessageListenerContainer -->
+	<jms:listener-container container-type="default" 
+							connection-factory="cachingConnectionFactory" 
+							acknowledge="auto"
+							concurrency="1">
+		<jms:listener  ref="consumerService"  destination="async.destination.queue" method="receiveMessage"/>
+	</jms:listener-container>
+	
 	
 </beans>
