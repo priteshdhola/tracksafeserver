@@ -122,4 +122,28 @@ public class UserController extends BaseController {
         Response response = buildResponse(o, u, t);
         return response;
     }
+    
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Path("/invite/accept/{host_id}")
+    public Response acceptInvitation(@Context Request req, @Context Response res, 
+    																@PathParam("host_id") Integer hostId) {
+
+        Throwable t = null;
+        Object o = null;
+        URI u = null;
+        Integer id = 2;
+
+        try{
+        	
+            userService.acceptInvitation(id, hostId);
+
+        } catch (Exception re) {
+            re.printStackTrace();
+            t = re;
+        }
+        Response response = buildResponse(o, u, t);
+        return response;
+    }
 }

@@ -39,6 +39,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 				<value>com.np.trackserver.dao.model.Activity</value>
 				<value>com.np.trackserver.dao.model.User</value>
 				<value>com.np.trackserver.dao.model.UserActivity</value>
+				<value>com.np.trackserver.dao.model.UserRelations</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

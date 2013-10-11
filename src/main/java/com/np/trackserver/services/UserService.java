@@ -4,14 +4,14 @@ import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import javax.ws.rs.core.Response;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.np.trackserver.dao.UserDAO;
+import com.np.trackserver.dao.UserRelationsDAO;
 import com.np.trackserver.dao.model.User;
+import com.np.trackserver.dao.model.UserRelations;
 import com.np.trackserver.exceptions.AuthenticationException;
 import com.np.trackserver.exceptions.NoResourceFoundException;
 import com.np.trackserver.services.beans.InviteMBean;
@@ -24,6 +24,9 @@ public class UserService {
 
     @Autowired
     UserDAO userDAO;
+    
+    @Autowired
+    UserRelationsDAO userRelationsDAO;
     
     @Autowired
     ProducerService producerService;
@@ -91,7 +94,7 @@ public class UserService {
             throw new AuthenticationException("Bad Credentials");
     }
     
-    @Transactional()
+    @Transactional
     public void inviteUser(Integer curUserId, String inviteeEmail){
     	
     	//TODO: 
@@ -109,5 +112,18 @@ public class UserService {
         
         producerService.handleMessage(i1);
     }
+
+    @Transactional
+	public void acceptInvitation(Integer inviteeId, Integer hostId) {
+		
+    	UserRelations ur = new UserRelations();
+    	ur.setUserId(hostId);
+    	ur.setRelatedUserId(inviteeId);
+    	ur.setCreatedDate(new Date());
+    	ur.setModifiedDate(new Date());
+    	
+    	userRelationsDAO.save(ur);
+		
+	}
 
 }
