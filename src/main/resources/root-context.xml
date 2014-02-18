@@ -19,6 +19,7 @@
         <property name="ignoreUnresolvablePlaceholders" value="true"/>
     </bean>	
     
+    <bean id="authorizationFilter" class="com.np.trackserver.controllers.filter.AuthorizationFilter" autowire="byName" />
     
 	<!-- Load the resource bundle to a message source -->
 	<bean name="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">

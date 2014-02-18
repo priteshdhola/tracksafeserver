@@ -12,4 +12,5 @@ import com.np.trackserver.dao.model.User;
 @Repository
 public interface UserDAO extends AbstractDAO<User> {
 
+	public abstract User getByUserName(String email);
 }

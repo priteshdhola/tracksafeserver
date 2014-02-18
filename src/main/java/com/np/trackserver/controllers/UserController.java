@@ -2,7 +2,10 @@ package com.np.trackserver.controllers;
 
 import java.net.URI;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -20,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.np.trackserver.services.UserService;
+import com.np.trackserver.services.beans.ActivityData;
 import com.np.trackserver.services.beans.UserData;
 
 @Controller
@@ -53,6 +57,25 @@ public class UserController extends BaseController {
         return response;
     }
 
+    @GET
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Path("/{id}")
+	public Response getUser(@Context Request req, @Context Response res, @PathParam("id") Integer id) {
+		
+		Throwable t = null;
+		Object o = null;
+		try {
+			
+			UserData user = userService.getUser(id);
+			o = user;
+			
+		} catch (Exception re) {
+			t = re;
+		}
+		Response response = buildResponse(o, t);
+		return response;
+	}
+    
     @PUT
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -76,30 +99,6 @@ public class UserController extends BaseController {
         return response;
     }
 
-    @POST
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Path("/auth")
-    public Response authenticateUser(@Context UriInfo uri, @Context Request req, @Context Response res, UserData userData) {
-
-        Throwable t = null;
-        Object o = null;
-        URI u = null;
-        Integer id = temp_user_id;
-
-        try{
-            userData.setId(id);
-            userService.authenticateUser(userData);
-            u = UriBuilder.fromUri(uri.getPath() + "/"+ id).build();
-
-        } catch (Exception re) {
-            re.printStackTrace();
-            t = re;
-        }
-        Response response = buildResponse(o, u, t);
-        return response;
-    }
-    
     @POST
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})

@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +42,11 @@ public class UserService {
         Date cur = new Date();
         User dbUser = new User();
 
+        if(StringUtils.isEmpty(user.getUserName())){
+        	dbUser.setUserName(user.getEmail());
+        }
         dbUser.setEmail(user.getEmail());
+        dbUser.setUserName(user.getUserName());
         dbUser.setPassword(user.getPassword());
         dbUser.setCreatedDate(cur);
         dbUser.setModifiedDate(cur);
@@ -74,24 +80,51 @@ public class UserService {
 
         userDAO.update(dbUser);
     }
+    
+    public UserData getUser(Integer id) {
+		
+    	User dbUser = null;
+        dbUser = userDAO.get(id);
+        
+        if(null == dbUser){
+            throw new NoResourceFoundException("No Such User Found");
+        }
+        
+		return dbUserToUserData(dbUser);
+	}
 
+    private static UserData dbUserToUserData(User dbUser){
+    	
+    	 UserData user = new UserData();
+         user.setId(dbUser.getId());
+         user.setUserName(dbUser.getUserName());
+         user.setEmail(dbUser.getEmail());
+         user.setAge(dbUser.getAge());
+         user.setHeight(dbUser.getHeight());
+         user.setSex(dbUser.getSex());
+         user.setWeight(dbUser.getWeight());
+         
+ 		return user;
+    }
+    
     @Transactional()
-    public void authenticateUser(UserData user){
+    public UserData authenticateUser(UserData user){
 
         User dbUser = null;
-        dbUser = userDAO.get(user.getId());
-        boolean result = false;
+        
+        dbUser = userDAO.getByUserName(user.getEmail());
 
         if(null == dbUser){
             throw new NoResourceFoundException("No Such User Found");
         }
 
         // First get the db object and only set the values which are not already set.
-        if((user.getEmail().equals(dbUser.getEmail())) && (user.getPassword().equals(dbUser.getPassword())))
-            result = true;
-
-        if(result == false)
-            throw new AuthenticationException("Bad Credentials");
+        if((user.getEmail().equals(dbUser.getEmail())) && (user.getPassword().equals(dbUser.getPassword()))){
+        	
+        	return dbUserToUserData(dbUser);
+        }
+            
+        throw new AuthenticationException("Bad Credentials");
     }
     
     @Transactional
