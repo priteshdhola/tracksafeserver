@@ -37,7 +37,7 @@ public class UserService {
 
     // Create User
     @Transactional()
-    public Integer createUser(UserData user){
+    public UserData createUser(UserData user){
 
         Date cur = new Date();
         User dbUser = new User();
@@ -51,7 +51,7 @@ public class UserService {
         dbUser.setCreatedDate(cur);
         dbUser.setModifiedDate(cur);
         dbUser = userDAO.save(dbUser);
-        return dbUser.getId();
+        return dbUserToUserData(dbUser);
     }
 
     // Update User Information

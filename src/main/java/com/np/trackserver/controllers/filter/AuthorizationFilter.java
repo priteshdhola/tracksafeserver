@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.np.trackserver.services.beans.UserData;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +32,7 @@ public class AuthorizationFilter implements Filter {
 			HttpSession session = ((HttpServletRequest) request).getSession(false);
 			if (session != null) {
 				
-				User user = (User)session.getAttribute("userdata");
+				UserData user = (UserData)session.getAttribute("userdata");
 				authorized = user != null && user.getId() != null;
 				
 			}

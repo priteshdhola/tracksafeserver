@@ -37,19 +37,28 @@ public class AuthController extends BaseController {
     @POST
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response createUser(@Context UriInfo uri, @Context Request req, @Context Response res, UserData userData) {
+    public Response createUser(@Context UriInfo uri, @Context Request req, @Context Response res, UserData userData,@Context HttpServletRequest request,@Context HttpSession session) {
 
         Throwable t = null;
         Object o = null;
         URI u = null;
-        Integer id = null;
 
         try{
-            id = userService.createUser(userData);
+            UserData user = userService.createUser(userData);
+
+            //create session
+            session = request.getSession (true);
+            if(session.isNew() == false){
+                session.invalidate();
+                session = request.getSession (true);
+            }
+
+            session.setAttribute("userdata", user);
+
             String uriStr = uri.getPath();
             uriStr = uriStr.substring(0, uriStr.lastIndexOf("/auth"));
             uriStr = uriStr + "/users";
-            u = UriBuilder.fromUri(uriStr + "/"+ id).build();
+            u = UriBuilder.fromUri(uriStr + "/"+ user.getId()).build();
 
         } catch (Exception re) {
             re.printStackTrace();
@@ -86,7 +95,7 @@ public class AuthController extends BaseController {
 				session = request.getSession (true);
 			}
 			
-			session.setAttribute("user", userData);
+			session.setAttribute("userdata", userData);
 			
         } catch (Exception re) {
             re.printStackTrace();

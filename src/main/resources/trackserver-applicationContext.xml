@@ -35,7 +35,7 @@
 	<!-- Embeded MQ server -->
 	<amq:broker brokerName="test-broker" start="true" useJmx="false" persistent="false">
 	  <amq:persistenceAdapter>
-	    <amq:amqPersistenceAdapter directory="/Users/npatel/temp/activemq" maxFileLength="32mb"/>
+	    <amq:amqPersistenceAdapter directory="/tmp/activemq" maxFileLength="32mb"/>
 	  </amq:persistenceAdapter>
 	  <amq:transportConnectors>
 	    <amq:transportConnector uri="tcp://localhost:7171"/>
