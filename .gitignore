@@ -6,3 +6,6 @@
 *.ear
 activemq-data/
 /target
+.classpath
+.project
+.setting

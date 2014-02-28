@@ -29,6 +29,12 @@ public class ActivityData {
 		
 		private List<UserData> users;
 		
+		private long time;
+		
+		private double distance;
+		
+		private double pace;
+		
 		public ActivityData(){
 			
 		}
@@ -83,5 +89,30 @@ public class ActivityData {
 		public void setCreatedBy(Integer createdBy) {
 			this.createdBy = createdBy;
 		}
+		
+		public long getTime() {
+			return time;
+		}
+
+		public void setTime(long time) {
+			this.time = time;
+		}
+
+		public double getDistance() {
+			return distance;
+		}
+
+		public void setDistance(double distance) {
+			this.distance = distance;
+		}
+
+		public double getPace() {
+			return pace;
+		}
+
+		public void setPace(double pace) {
+			this.pace = pace;
+		}
+		 
 		
 }

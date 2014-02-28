@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Random;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.http.HttpRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,21 +39,20 @@ public class ActivityController extends BaseController {
 	@Autowired
 	ActivityService activityService;
 	
-	private final int temp_user_id = 1;
-	
 	@POST
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public Response createActivity(@Context UriInfo uri, @Context Request req, @Context Response res, ActivityData activityData) {
+	public Response createActivity(@Context UriInfo uri, @Context HttpServletRequest req, @Context Response res, ActivityData activityData) {
 		
 		Throwable t = null;
 		Object o = null;
 		URI u = null;
 		Integer id = null;
 		
-		activityData.setCreatedBy(temp_user_id);
-		UserData user = new UserData();
-		user.setId(temp_user_id);
+		
+		UserData user = (UserData)req.getSession().getAttribute("userdata");
+		
+		activityData.setCreatedBy(user.getId());
 		
 		try{
 			id = activityService.createActivity(activityData, user);
@@ -66,16 +67,44 @@ public class ActivityController extends BaseController {
 		
 	}
 	
+	@POST
+	@Path("/{activity_id}/finish")
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	public Response finishActivity(@Context UriInfo uri, @Context HttpServletRequest req, @Context Response res, @PathParam("activity_id") Integer activityId,
+			ActivityData activityData) {
+		
+		Throwable t = null;
+		Object o = null;
+		URI u = null;
+		
+		UserData user = (UserData)req.getSession().getAttribute("userdata");
+		
+		try{
+			activityService.finishActivity(activityData, activityId, user.getId());
+		
+		} catch (Exception re) {
+			re.printStackTrace();
+			t = re;
+		}
+		Response response = buildResponse(o, u, t);
+		return response;
+		
+	}
+	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	@Path("/{id}")
-	public Response getActivity(@Context Request req, @Context Response res, @PathParam("id") Integer id) {
+	@Path("/{activity_id}")
+	public Response getActivity(@Context HttpServletRequest req, @Context Response res,
+			@PathParam("activity_id") Integer id) {
 		
 		Throwable t = null;
 		Object o = null;
 		try {
 			
-			ActivityData activity = activityService.getActivity(id);
+			UserData user =  (UserData)req.getSession().getAttribute("userdata");
+			
+			ActivityData activity = activityService.getActivity(id, user.getId());
 			o = activity;
 			
 		} catch (Exception re) {
@@ -87,13 +116,13 @@ public class ActivityController extends BaseController {
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public Response getActivities(@Context Request req, @Context Response res) {
+	public Response getActivities(@Context HttpServletRequest req, @Context Response res) {
 		
 		Throwable t = null;
 		Object o = null;
 		try {
-		
-			List<ActivityData> activityList = activityService.getActivitiesByUserId(temp_user_id);
+			UserData user =  (UserData)req.getSession().getAttribute("userdata");
+			List<ActivityData> activityList = activityService.getActivitiesByUserId(user.getId());
 			ActivityDataList page = new ActivityDataList();
 			page.setActivityList(activityList);
 			o = page;
@@ -106,22 +135,20 @@ public class ActivityController extends BaseController {
 		
 		
 	}
-	public void updateActivity(Request req, Response res) {
+	public void updateActivity(HttpServletRequest req, Response res) {
 		
 	}
 	
 	@POST
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Path("/{activity_id}")
-	public Response trackUserLocationForActivity(@Context Request req, @Context Response res, @PathParam("activity_id") Integer activityId,
-				LocationData location) {
+	public Response trackUserLocationForActivity(@Context HttpServletRequest req, @Context Response res, @PathParam("activity_id") Integer activityId,
+			 LocationData location) {
 		
 		Throwable t = null;
 		Object o = null;
 		try {
-			UserData user = new UserData();
-			user.setUserName("test user :"+new Random().nextInt());
-			user.setId(temp_user_id);
+			UserData user =  (UserData)req.getSession().getAttribute("userdata");
 			location.setUser(user);
 			activityService.trackUserLocationForActivity(activityId, location);
 			
@@ -135,7 +162,8 @@ public class ActivityController extends BaseController {
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Path("/{activity_id}/userLocations")
-	public Response getUserLocationForActivity(@Context Request req, @Context Response res, @PathParam("activity_id") Integer activityId) {
+	public Response getUserLocationForActivity(@Context HttpServletRequest req, @Context Response res,
+			@PathParam("activity_id") Integer activityId) {
 		
 		Throwable t = null;
 		Object o = null;
@@ -158,7 +186,7 @@ public class ActivityController extends BaseController {
 	@POST
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Path("/{activity_id}/{user_id}")
-	public Response trackUserLocationForActivity1(@Context Request req, @Context Response res, @PathParam("activity_id") Integer activityId, @PathParam("user_id") Integer userId,
+	public Response trackUserLocationForActivity1(@Context HttpServletRequest req, @Context Response res, @PathParam("activity_id") Integer activityId, @PathParam("user_id") Integer userId,
 				LocationData location) {
 		
 		Throwable t = null;

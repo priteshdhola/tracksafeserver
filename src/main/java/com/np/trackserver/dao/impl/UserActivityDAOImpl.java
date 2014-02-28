@@ -14,6 +14,8 @@ public class UserActivityDAOImpl extends AbstractDAOImpl<UserActivity> implement
 
 	private static final String GET_USERACTIVITY_BY_USER = "from UserActivity ua where ua.user.id = ?";
 	
+	private static final String GET_USERACTIVITY_BY_USER_ACTIVITY = "from UserActivity ua where ua.user.id = ? and ua.activity.id = ?";
+	
 	protected UserActivityDAOImpl() {
 		super(UserActivity.class);
 	}
@@ -24,6 +26,18 @@ public class UserActivityDAOImpl extends AbstractDAOImpl<UserActivity> implement
 		Session session = getSessionFactory().getCurrentSession();
 		return session.createQuery(GET_USERACTIVITY_BY_USER).setInteger(0, id).list();
 		
+	}
+
+	@Override
+	public UserActivity getUserActivityByUIDAID(int uid, int aid) {
+		Session session = getSessionFactory().getCurrentSession();
+		List<UserActivity> uas =  session.createQuery(GET_USERACTIVITY_BY_USER_ACTIVITY)
+				.setInteger(0, uid)
+				.setInteger(1, aid).list();
+		if(uas != null && uas.size() > 0){
+			return uas.get(0);
+		}
+		return null;
 	}
 	
 

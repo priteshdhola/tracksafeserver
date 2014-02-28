@@ -8,4 +8,6 @@ public interface UserActivityDAO extends AbstractDAO<UserActivity> {
 
 	List<UserActivity> getUserActivitiesByUID(int id);
 	
+	UserActivity getUserActivityByUIDAID(int uid, int aid);
+	
 }

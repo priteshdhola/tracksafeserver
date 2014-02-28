@@ -2,8 +2,6 @@ package com.np.trackserver.controllers;
 
 import java.net.URI;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -20,10 +18,10 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.np.trackserver.services.UserService;
-import com.np.trackserver.services.beans.ActivityData;
 import com.np.trackserver.services.beans.UserData;
 
 @Controller

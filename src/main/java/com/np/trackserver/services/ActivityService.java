@@ -17,6 +17,7 @@ import com.np.trackserver.dao.UserActivityDAO;
 import com.np.trackserver.dao.model.Activity;
 import com.np.trackserver.dao.model.User;
 import com.np.trackserver.dao.model.UserActivity;
+import com.np.trackserver.exceptions.NoResourceFoundException;
 import com.np.trackserver.services.beans.ActivityData;
 import com.np.trackserver.services.beans.LocationData;
 import com.np.trackserver.services.beans.UserData;
@@ -60,13 +61,16 @@ public class ActivityService {
 	}
 	
 	@Transactional(readOnly=true)
-	public ActivityData getActivity(Integer id){
+	public ActivityData getActivity(Integer id, Integer uid){
 		
-		Activity dbActivity = activityDAO.get(id);
+		UserActivity dbUActivity = userActivityDAO.getUserActivityByUIDAID(uid, id);
 		
-		if(dbActivity == null) return null;
+		if(dbUActivity == null) 
+			throw new NoResourceFoundException("No Such Activity Found for loggedin user");
 		
-		return createActivityDataFromDBActivity(dbActivity);
+		Activity dbActivity = dbUActivity.getActivity();
+		
+		return createActivityDataFromDBActivity(dbActivity, dbUActivity);
 	}
 	
 	@Transactional(readOnly=true)
@@ -83,12 +87,12 @@ public class ActivityService {
 		for(UserActivity ua : dbUserActivities) {
 			
 			Activity dbActivity = ua.getActivity();
-			activities.add(createActivityDataFromDBActivity(dbActivity));
+			activities.add(createActivityDataFromDBActivity(dbActivity, ua));
 		}
 		return activities;
 	}
 	
-	private ActivityData createActivityDataFromDBActivity(Activity dbActivity){
+	private ActivityData createActivityDataFromDBActivity(Activity dbActivity, UserActivity dbUActivity){
 		
 		ActivityData activityData = new ActivityData();
 		activityData.setName(dbActivity.getName());
@@ -97,8 +101,15 @@ public class ActivityService {
 		activityData.setCreatedDate(dbActivity.getCreatedDate());
 		activityData.setCreatedBy(dbActivity.getCreatedBy());
 		
+		if(dbUActivity != null){
+			activityData.setTime(dbUActivity.getTime());
+			activityData.setDistance(dbUActivity.getDistance());
+			activityData.setPace(dbUActivity.getPace());
+		}
+		
 		return activityData;
 	}
+	
 	
 	public void trackUserLocationForActivity(Integer activityId, LocationData location){
 		
@@ -120,5 +131,21 @@ public class ActivityService {
 		List<LocationData> list =  new ArrayList<LocationData>(locations);
 		return list;
 		
+	}
+
+	@Transactional
+	public void finishActivity(ActivityData uaData,
+			Integer activityId, Integer userId) {
+
+		UserActivity ua = userActivityDAO.getUserActivityByUIDAID(userId, activityId);
+		if(ua == null){
+			throw new NoResourceFoundException("No Such Activity Found for loggedin user");
+		}
+		
+		ua.setPace(uaData.getPace());
+		ua.setTime(uaData.getTime());
+		ua.setDistance(uaData.getDistance());
+		
+		userActivityDAO.update(ua);
 	}
 }

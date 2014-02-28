@@ -32,7 +32,16 @@ public class UserActivity {
 	
 	@Column(name="modified_date")
 	private Date modifiedDate;
-
+	
+	@Column(name="time")
+	private long time;
+	
+	@Column(name="distance")
+	private double distance;
+	
+	@Column(name="pace")
+	private double pace;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -71,6 +80,30 @@ public class UserActivity {
 
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
+	}
+
+	public long getTime() {
+		return time;
+	}
+
+	public void setTime(long time) {
+		this.time = time;
+	}
+
+	public double getDistance() {
+		return distance;
+	}
+
+	public void setDistance(double distance) {
+		this.distance = distance;
+	}
+
+	public double getPace() {
+		return pace;
+	}
+
+	public void setPace(double pace) {
+		this.pace = pace;
 	}
 	
 	

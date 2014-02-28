@@ -12,13 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.np.trackserver.services.beans.UserData;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
-import com.np.trackserver.dao.model.User;
+import com.np.trackserver.services.beans.UserData;
 
+@Controller
 public class AuthorizationFilter implements Filter {
+	
 
 	private static final Logger logger = Logger.getLogger(AuthorizationFilter.class);
 
