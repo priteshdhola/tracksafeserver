@@ -100,12 +100,14 @@ public class ActivityService {
 		activityData.setStartDate(dbActivity.getStartDate());
 		activityData.setCreatedDate(dbActivity.getCreatedDate());
 		activityData.setCreatedBy(dbActivity.getCreatedBy());
-		
+
+
+        /*
 		if(dbUActivity != null){
 			activityData.setTime(dbUActivity.getTime());
-			activityData.setDistance(dbUActivity.getDistance());
+            activityData.setDistance(dbUActivity.getDistance());
 			activityData.setPace(dbUActivity.getPace());
-		}
+		} */
 		
 		return activityData;
 	}

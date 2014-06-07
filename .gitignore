@@ -9,3 +9,5 @@ activemq-data/
 .classpath
 .project
 .setting
+.idea/*
+trackSafeServer.iml

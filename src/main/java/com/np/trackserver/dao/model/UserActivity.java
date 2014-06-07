@@ -34,13 +34,13 @@ public class UserActivity {
 	private Date modifiedDate;
 	
 	@Column(name="time")
-	private long time;
+	private Long time;
 	
 	@Column(name="distance")
-	private double distance;
+	private Double distance;
 	
 	@Column(name="pace")
-	private double pace;
+	private Double pace;
 	
 	public Integer getId() {
 		return id;
@@ -82,27 +82,27 @@ public class UserActivity {
 		this.modifiedDate = modifiedDate;
 	}
 
-	public long getTime() {
+	public Long getTime() {
 		return time;
 	}
 
-	public void setTime(long time) {
+	public void setTime(Long time) {
 		this.time = time;
 	}
 
-	public double getDistance() {
+	public Double getDistance() {
 		return distance;
 	}
 
-	public void setDistance(double distance) {
+	public void setDistance(Double distance) {
 		this.distance = distance;
 	}
 
-	public double getPace() {
+	public Double getPace() {
 		return pace;
 	}
 
-	public void setPace(double pace) {
+	public void setPace(Double pace) {
 		this.pace = pace;
 	}
 	
