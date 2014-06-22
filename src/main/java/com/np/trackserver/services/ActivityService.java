@@ -95,6 +95,7 @@ public class ActivityService {
 	private ActivityData createActivityDataFromDBActivity(Activity dbActivity, UserActivity dbUActivity){
 		
 		ActivityData activityData = new ActivityData();
+        activityData.setId(dbActivity.getId());
 		activityData.setName(dbActivity.getName());
 		activityData.setType(dbActivity.getType());
 		activityData.setStartDate(dbActivity.getStartDate());
