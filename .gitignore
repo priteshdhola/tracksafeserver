@@ -1,5 +1,4 @@
 *.class
-
 # Package Files #
 *.jar
 *.war
@@ -11,3 +10,6 @@ activemq-data/
 .setting
 .idea/*
 trackSafeServer.iml
+/bin
+.DS_Store
+src/.DS_Store
