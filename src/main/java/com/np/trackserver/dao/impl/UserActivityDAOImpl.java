@@ -17,7 +17,8 @@ public class UserActivityDAOImpl extends AbstractDAOImpl<UserActivity> implement
 	private static final String GET_ALL_USERACTIVITY = "from UserActivity ua";
 	
 	//2 is status "stop"
-	private static final String GET_ALL_ACTIVE_USERACTIVITY = "from UserActivity ua where ua.activity.status != 2";
+	private static final String GET_ALL_ACTIVE_USERACTIVITY = "from UserActivity ua where ua.activity.status is NULL or "
+			+ "ua.activity.status != 2";
 	
 	private static final String GET_USERACTIVITY_BY_USER_ACTIVITY = "from UserActivity ua where ua.user.id = ? and ua.activity.id = ?";
 	

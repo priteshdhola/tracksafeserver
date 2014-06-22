@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -28,75 +31,91 @@ public class ActivityStatusMonitor {
 	@Autowired
 	UserActivityDAO userActivityDAO;
 	
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	
+	//every 2 hours
 	@Scheduled(fixedRate = 7200000)
 	@Transactional
 	public void run(){
 		
+		logger.info("Running Activity Status Monitor..");
 		DateTime curDateTime = new DateTime();
 		
-		List<UserActivity> dbUserActivities = userActivityDAO.getAllActiveUserActivities();
-		
-		if(CollectionUtils.isEmpty(dbUserActivities)){
-			return;
-		} 
-		
-		//TODO: Keys should be immutable
-		Map<Activity, Boolean> activitiesStatus = new HashMap<Activity, Boolean>();
-		Map<UserActivity, Boolean> userActivitiesStatus = new HashMap<UserActivity, Boolean>();
-		
-		
-		for(UserActivity dbUserActivity : dbUserActivities) {
+		try {
 			
-			Activity dbActivity = dbUserActivity.getActivity();
+			List<UserActivity> dbUserActivities = userActivityDAO.getAllActiveUserActivities();
 			
-			//Check start date; if it's past one day change both activity and useractivity status to STOP 
-			Date date = dbActivity.getStartDate();
-			DateTime startDate = date==null?null:new DateTime(date);
+			if(CollectionUtils.isEmpty(dbUserActivities)){
+				return;
+			} 
 			
-			if(startDate.isBefore(curDateTime.getMillis())){
+			//TODO: Keys should be immutable
+			Map<Activity, Boolean> activitiesStatus = new HashMap<Activity, Boolean>();
+			Map<UserActivity, Boolean> userActivitiesStatus = new HashMap<UserActivity, Boolean>();
+			
+			
+			for(UserActivity dbUserActivity : dbUserActivities) {
 				
-				if(activitiesStatus.get(dbActivity) == null){
-					activitiesStatus.put(dbActivity, false);
+				Activity dbActivity = dbUserActivity.getActivity();
+				
+				//Check start date; if it's past one day change both activity and useractivity status to STOP 
+				Date date = dbActivity.getStartDate();
+				DateTime startDate = date==null ? null : new DateTime(date);
+				
+				if(startDate == null){
+					continue;
 				}
-				if(userActivitiesStatus.get(dbUserActivity) == null){
-					userActivitiesStatus.put(dbUserActivity, false);
+				if(startDate.isBefore(curDateTime.getMillis())){
+					
+					if(activitiesStatus.get(dbActivity) == null){
+						activitiesStatus.put(dbActivity, false);
+					}
+					if(userActivitiesStatus.get(dbUserActivity) == null){
+						userActivitiesStatus.put(dbUserActivity, false);
+					}
+				}
+				
+				if(UserActivityData.Status.STOP.getValue().equals(dbUserActivity.getStatus())){
+					
+					if(activitiesStatus.get(dbActivity) == null){
+						activitiesStatus.put(dbActivity, false);
+					}
+					
+				} else {
+					
+					if(activitiesStatus.get(dbActivity) == null){
+						activitiesStatus.put(dbActivity, true);
+					}
+				}
+			}
+			// Update activity status to STOP if false
+			for(Map.Entry<Activity, Boolean> entry : activitiesStatus.entrySet()){
+				Activity activity = entry.getKey();
+				Boolean status = entry.getValue();
+				
+				if(!status){
+					activity.setStatus(ActivityData.Status.STOP.getValue());
+					activityDAO.update(activity);
 				}
 			}
 			
-			if(UserActivityData.Status.STOP.getValue().equals(dbUserActivity.getStatus())){
+			// Update user activity status to STOP if false
+			for(Map.Entry<UserActivity, Boolean> entry : userActivitiesStatus.entrySet()){
+				UserActivity userActivity = entry.getKey();
+				Boolean status = entry.getValue();
 				
-				if(activitiesStatus.get(dbActivity) == null){
-					activitiesStatus.put(dbActivity, false);
-				}
-				
-			} else {
-				
-				if(activitiesStatus.get(dbActivity) == null){
-					activitiesStatus.put(dbActivity, true);
+				if(!status){
+					userActivity.setStatus(UserActivityData.Status.STOP.getValue());
+					userActivityDAO.update(userActivity);
 				}
 			}
+			
+		} catch (Exception e) {
+			logger.error("Error running Activity Status Monitor.", ExceptionUtils.getStackTrace(e));
+			throw e;
 		}
-		// Update activity status to STOP if false
-		for(Map.Entry<Activity, Boolean> entry : activitiesStatus.entrySet()){
-			Activity activity = entry.getKey();
-			Boolean status = entry.getValue();
-			
-			if(!status){
-				activity.setStatus(ActivityData.Status.STOP.getValue());
-				activityDAO.update(activity);
-			}
-		}
 		
-		// Update user activity status to STOP if false
-		for(Map.Entry<UserActivity, Boolean> entry : userActivitiesStatus.entrySet()){
-			UserActivity userActivity = entry.getKey();
-			Boolean status = entry.getValue();
-			
-			if(!status){
-				userActivity.setStatus(UserActivityData.Status.STOP.getValue());
-				userActivityDAO.update(userActivity);
-			}
-		}
+		logger.info("Finishing Activity Status Monitor..");
 	}
 
 }
