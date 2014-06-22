@@ -14,6 +14,11 @@ public class UserActivityDAOImpl extends AbstractDAOImpl<UserActivity> implement
 
 	private static final String GET_USERACTIVITY_BY_USER = "from UserActivity ua where ua.user.id = ?";
 	
+	private static final String GET_ALL_USERACTIVITY = "from UserActivity ua";
+	
+	//2 is status "stop"
+	private static final String GET_ALL_ACTIVE_USERACTIVITY = "from UserActivity ua where ua.activity.status != 2";
+	
 	private static final String GET_USERACTIVITY_BY_USER_ACTIVITY = "from UserActivity ua where ua.user.id = ? and ua.activity.id = ?";
 	
 	protected UserActivityDAOImpl() {
@@ -38,6 +43,20 @@ public class UserActivityDAOImpl extends AbstractDAOImpl<UserActivity> implement
 			return uas.get(0);
 		}
 		return null;
+	}
+
+	@Override
+	public List<UserActivity> getAllUserActivities() {
+		
+		Session session = getSessionFactory().getCurrentSession();
+		return session.createQuery(GET_ALL_USERACTIVITY).list();
+	}
+
+	@Override
+	public List<UserActivity> getAllActiveUserActivities() {
+		
+		Session session = getSessionFactory().getCurrentSession();
+		return session.createQuery(GET_ALL_ACTIVE_USERACTIVITY).list();
 	}
 	
 

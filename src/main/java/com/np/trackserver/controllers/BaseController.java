@@ -7,6 +7,8 @@ import javax.ws.rs.core.Response;
 
 import com.np.trackserver.exceptions.AuthenticationException;
 import com.np.trackserver.exceptions.NoResourceFoundException;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 
@@ -66,7 +68,9 @@ public class BaseController {
 		quovaCode = e.getClass().getName(); // TODO: this may be TMI for the caller
 		description = e.getMessage(); // the throwing module should be as specific as it can be. in case of 500 it may
 										// be TMI
-
+		
+		logger.error(ExceptionUtils.getStackTrace(e));
+		
 		if (e instanceof IllegalArgumentException) {
 			httpStatus = Response.Status.BAD_REQUEST;
 

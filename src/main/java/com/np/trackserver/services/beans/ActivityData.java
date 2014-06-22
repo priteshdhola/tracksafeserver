@@ -3,7 +3,11 @@ package com.np.trackserver.services.beans;
 import java.util.Date;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+import com.np.trackserver.services.beans.UserActivityData.Status;
 
 /**
  * Activity model which maps to database Activity object
@@ -27,18 +31,23 @@ public class ActivityData {
 		
 		private Integer createdBy;
 		
-		private List<UserData> users;
+		private List<UserActivityData> userActivities;
 		
-		private long time;
+		private Status status;
 		
-		private double distance;
-		
-		private double pace;
-		
-		public ActivityData(){
-			
+		public Status getStatus() {
+			return status;
+		}
+		public void setStatus(Status status) {
+			this.status = status;
 		}
 		
+		public List<UserActivityData> getUserActivities() {
+			return userActivities;
+		}
+		public void setUserActivities(List<UserActivityData> userActivities) {
+			this.userActivities = userActivities;
+		}
 		public Integer getId() {
 			return id;
 		}
@@ -75,13 +84,6 @@ public class ActivityData {
 		public void setModifiedDate(Date modifiedDate) {
 			this.modifiedDate = modifiedDate;
 		}
-		public List<UserData> getUsers() {
-			return users;
-		}
-		public void setUsers(List<UserData> users) {
-			this.users = users;
-		}
-
 		public Integer getCreatedBy() {
 			return createdBy;
 		}
@@ -90,29 +92,37 @@ public class ActivityData {
 			this.createdBy = createdBy;
 		}
 		
-		public long getTime() {
-			return time;
+		@XmlType(namespace="activity", name = "status")
+		@XmlEnum
+		public enum Status{
+			
+			NOT_STARTED(0), RUNNING(1), STOP(2);
+			
+			private Integer val;
+			
+			Status(int val){
+				this.val = val;
+			}
+			
+			public Integer getValue(){
+				return val;
+			}
+			
+			public static Status fromValue(Integer val){
+				
+				for(Status t : Status.values()){
+					if(t.equals(val)){
+						return t;
+					}
+				}
+				if(null == val){
+					return Status.NOT_STARTED;
+				}
+				throw new IllegalArgumentException(""+val);
+			}
+			
 		}
 
-		public void setTime(long time) {
-			this.time = time;
-		}
-
-		public double getDistance() {
-			return distance;
-		}
-
-		public void setDistance(double distance) {
-			this.distance = distance;
-		}
-
-		public double getPace() {
-			return pace;
-		}
-
-		public void setPace(double pace) {
-			this.pace = pace;
-		}
-		 
+		
 		
 }

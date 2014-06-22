@@ -13,12 +13,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.http.HttpRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +26,7 @@ import com.np.trackserver.services.beans.ActivityData;
 import com.np.trackserver.services.beans.ActivityDataList;
 import com.np.trackserver.services.beans.LocationData;
 import com.np.trackserver.services.beans.LocationDataList;
+import com.np.trackserver.services.beans.UserActivityData;
 import com.np.trackserver.services.beans.UserData;
 
 @Controller
@@ -49,7 +48,6 @@ public class ActivityController extends BaseController {
 		URI u = null;
 		Integer id = null;
 		
-		
 		UserData user = (UserData)req.getSession().getAttribute("userdata");
 		
 		activityData.setCreatedBy(user.getId());
@@ -68,11 +66,11 @@ public class ActivityController extends BaseController {
 	}
 	
 	@POST
-	@Path("/{activity_id}/finish")
+	@Path("/{activity_id}/updateStatus")
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public Response finishActivity(@Context UriInfo uri, @Context HttpServletRequest req, @Context Response res, @PathParam("activity_id") Integer activityId,
-			ActivityData activityData) {
+	public Response updateActivityStatus(@Context UriInfo uri, @Context HttpServletRequest req, @Context Response res, @PathParam("activity_id") Integer activityId,
+			UserActivityData userAactivityData) {
 		
 		Throwable t = null;
 		Object o = null;
@@ -81,7 +79,7 @@ public class ActivityController extends BaseController {
 		UserData user = (UserData)req.getSession().getAttribute("userdata");
 		
 		try{
-			activityService.finishActivity(activityData, activityId, user.getId());
+			activityService.updateActivityStatus(userAactivityData, activityId, user.getId());
 		
 		} catch (Exception re) {
 			re.printStackTrace();

@@ -3,11 +3,15 @@ package com.np.trackserver.services;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +24,7 @@ import com.np.trackserver.dao.model.UserActivity;
 import com.np.trackserver.exceptions.NoResourceFoundException;
 import com.np.trackserver.services.beans.ActivityData;
 import com.np.trackserver.services.beans.LocationData;
+import com.np.trackserver.services.beans.UserActivityData;
 import com.np.trackserver.services.beans.UserData;
 
 @Service
@@ -34,6 +39,8 @@ public class ActivityService {
 	
 	private ConcurrentMap<Integer, ConcurrentMap<Integer, LocationData>> userActivityLocations = new ConcurrentHashMap<Integer, ConcurrentMap<Integer, LocationData>>();
 
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	
 	@Transactional()
 	public Integer createActivity(ActivityData activity, UserData user){
 		
@@ -68,31 +75,62 @@ public class ActivityService {
 		if(dbUActivity == null) 
 			throw new NoResourceFoundException("No Such Activity Found for loggedin user");
 		
-		Activity dbActivity = dbUActivity.getActivity();
-		
-		return createActivityDataFromDBActivity(dbActivity, dbUActivity);
+		return createActivityDataFromDBActivity(dbUActivity.getActivity());
 	}
 	
 	@Transactional(readOnly=true)
 	public List<ActivityData> getActivitiesByUserId(Integer id){
 		
 		List<UserActivity> dbUserActivities = userActivityDAO.getUserActivitiesByUID(id);
-		List<ActivityData> activities = null;
+		
+		Map<Activity, ActivityData> activityDataMap = null;
 		
 		if(CollectionUtils.isEmpty(dbUserActivities)){
 			return null;
 		} else {
-			activities = new ArrayList<ActivityData>();
+			activityDataMap = new HashMap<Activity, ActivityData>();
 		}
-		for(UserActivity ua : dbUserActivities) {
+		for(UserActivity userActivity : dbUserActivities) {
 			
-			Activity dbActivity = ua.getActivity();
-			activities.add(createActivityDataFromDBActivity(dbActivity, ua));
+			Activity activity = userActivity.getActivity();
+			ActivityData activityData = null;
+			
+			if((activityData = activityDataMap.get(activity)) == null){
+				
+				activityData = createActivityDataFromDBActivity(activity);
+				
+				List<UserActivityData> userActivityDataList = new ArrayList<UserActivityData>();
+				userActivityDataList.add(createUserActivityDataFromDBEntity(userActivity));
+				
+				activityData.setUserActivities(userActivityDataList);
+				activityDataMap.put(activity, activityData);
+				
+			} else {
+				
+				List<UserActivityData> userActivityDataList =  activityData.getUserActivities();
+				userActivityDataList.add(createUserActivityDataFromDBEntity(userActivity));
+			}
 		}
-		return activities;
+		return new ArrayList<ActivityData>(activityDataMap.values());
 	}
 	
-	private ActivityData createActivityDataFromDBActivity(Activity dbActivity, UserActivity dbUActivity){
+	private UserActivityData createUserActivityDataFromDBEntity(UserActivity dbUserActivity){
+		
+		UserActivityData ua = new UserActivityData();
+		UserData user = new UserData();
+		user.setId(dbUserActivity.getUser().getId());
+		user.setUserName(dbUserActivity.getUser().getUserName());
+		
+		ua.setUser(user);
+		ua.setDistance(dbUserActivity.getDistance());
+		ua.setPace(dbUserActivity.getPace());
+		ua.setTime(dbUserActivity.getTime());
+		ua.setStatus(UserActivityData.Status.fromValue(dbUserActivity.getStatus()));
+		
+		return ua;
+	}
+	
+	private ActivityData createActivityDataFromDBActivity(Activity dbActivity){
 		
 		ActivityData activityData = new ActivityData();
         activityData.setId(dbActivity.getId());
@@ -101,7 +139,7 @@ public class ActivityService {
 		activityData.setStartDate(dbActivity.getStartDate());
 		activityData.setCreatedDate(dbActivity.getCreatedDate());
 		activityData.setCreatedBy(dbActivity.getCreatedBy());
-
+		activityData.setStatus(ActivityData.Status.fromValue(dbActivity.getStatus()));
 
         /*
 		if(dbUActivity != null){
@@ -137,8 +175,7 @@ public class ActivityService {
 	}
 
 	@Transactional
-	public void finishActivity(ActivityData uaData,
-			Integer activityId, Integer userId) {
+	public void updateActivityStatus(UserActivityData uaData, Integer activityId, Integer userId) {
 
 		UserActivity ua = userActivityDAO.getUserActivityByUIDAID(userId, activityId);
 		if(ua == null){
@@ -148,6 +185,7 @@ public class ActivityService {
 		ua.setPace(uaData.getPace());
 		ua.setTime(uaData.getTime());
 		ua.setDistance(uaData.getDistance());
+		ua.setStatus(uaData.getStatus().getValue());
 		
 		userActivityDAO.update(ua);
 	}

@@ -28,16 +28,28 @@ public class AuthorizationFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		
 		boolean authorized = false;
+		UserData user = null;
 		
 		if (request instanceof HttpServletRequest) {
 			HttpSession session = ((HttpServletRequest) request).getSession(false);
 			if (session != null) {
 				
-				UserData user = (UserData)session.getAttribute("userdata");
+				user = (UserData)session.getAttribute("userdata");
 				authorized = user != null && user.getId() != null;
-				
 			}
 		}
+		//this is to bypass auth; remove this in prod
+		if(!authorized){
+			
+			if(user == null){
+				user = new UserData();
+				user.setId(2);
+				((HttpServletRequest) request).getSession(true).setAttribute("userdata", user);
+			}
+			authorized = true;
+			
+		}
+		//...
 		
 		if (authorized) {
 			chain.doFilter(request, response);

@@ -6,6 +6,7 @@
 	xmlns:jms="http://www.springframework.org/schema/jms"
 	xmlns:amq="http://activemq.apache.org/schema/core"
 	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
 
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
@@ -16,10 +17,16 @@
 		http://www.springframework.org/schema/aop
 		http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 		http://activemq.apache.org/schema/core 
-		http://activemq.apache.org/schema/core/activemq-core-5.7.0.xsd">
+		http://activemq.apache.org/schema/core/activemq-core-5.7.0.xsd
+		http://www.springframework.org/schema/task 
+		http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 	
 	<context:annotation-config />
+	<!-- enabling annotaion based transaction  -->
 	<tx:annotation-driven />
+	<!-- enabling annotaion based task scheduling  -->
+	<task:annotation-driven/>
+	
 	<import resource="classpath:datasource-context.xml"/>
 	<import resource="classpath:springmvc-resteasy.xml"/>
 	<import resource="classpath:root-context.xml"/>
