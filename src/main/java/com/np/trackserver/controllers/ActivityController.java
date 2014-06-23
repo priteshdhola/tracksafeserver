@@ -25,8 +25,9 @@ import com.np.trackserver.services.ActivityService;
 import com.np.trackserver.services.beans.ActivityData;
 import com.np.trackserver.services.beans.ActivityDataList;
 import com.np.trackserver.services.beans.LocationData;
-import com.np.trackserver.services.beans.LocationDataList;
 import com.np.trackserver.services.beans.UserActivityData;
+import com.np.trackserver.services.beans.UserActivityLocationData;
+import com.np.trackserver.services.beans.UserActivityLocationDataList;
 import com.np.trackserver.services.beans.UserData;
 
 @Controller
@@ -141,14 +142,15 @@ public class ActivityController extends BaseController {
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Path("/{activity_id}")
 	public Response trackUserLocationForActivity(@Context HttpServletRequest req, @Context Response res, @PathParam("activity_id") Integer activityId,
-			 LocationData location) {
+			UserActivityLocationData userActivityLocation) {
 		
 		Throwable t = null;
 		Object o = null;
 		try {
 			UserData user =  (UserData)req.getSession().getAttribute("userdata");
-			location.setUser(user);
-			activityService.trackUserLocationForActivity(activityId, location);
+			UserActivityData userActivityData = userActivityLocation.getUserActivityData();
+			userActivityData.setUser(user);
+			activityService.trackUserLocationForActivity(activityId, userActivityLocation);
 			
 		} catch (Exception re) {
 			t = re;
@@ -167,10 +169,10 @@ public class ActivityController extends BaseController {
 		Object o = null;
 		try {
 		
-			List<LocationData> usersLocation = activityService.getUsersLocationForActivity(activityId);
+			List<UserActivityLocationData> usersLocation = activityService.getUsersLocationForActivity(activityId);
 			
-			LocationDataList page = new LocationDataList();
-			page.setLocationList(usersLocation);
+			UserActivityLocationDataList page = new UserActivityLocationDataList();
+			page.setUserActivityLocationDataList(usersLocation);
 			o = page;
 			
 		} catch (Exception re) {
@@ -181,11 +183,20 @@ public class ActivityController extends BaseController {
 		
 	}
 	
+	/**
+	 * THis method is test method to mokc locations of various mock users
+	 * @param req
+	 * @param res
+	 * @param activityId
+	 * @param userId
+	 * @param location
+	 * @return
+	 */
 	@POST
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Path("/{activity_id}/{user_id}")
 	public Response trackUserLocationForActivity1(@Context HttpServletRequest req, @Context Response res, @PathParam("activity_id") Integer activityId, @PathParam("user_id") Integer userId,
-				LocationData location) {
+			UserActivityLocationData location) {
 		
 		Throwable t = null;
 		Object o = null;
@@ -193,7 +204,7 @@ public class ActivityController extends BaseController {
 			UserData user = new UserData();
 			user.setUserName("test user :"+new Random().nextInt());
 			user.setId(userId);
-			location.setUser(user);
+			location.getUserActivityData().setUser(user);
 			activityService.trackUserLocationForActivity(activityId, location);
 			
 		} catch (Exception re) {

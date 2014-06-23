@@ -25,6 +25,7 @@ import com.np.trackserver.exceptions.NoResourceFoundException;
 import com.np.trackserver.services.beans.ActivityData;
 import com.np.trackserver.services.beans.LocationData;
 import com.np.trackserver.services.beans.UserActivityData;
+import com.np.trackserver.services.beans.UserActivityLocationData;
 import com.np.trackserver.services.beans.UserData;
 
 @Service
@@ -36,8 +37,8 @@ public class ActivityService {
 	
 	@Autowired
 	UserActivityDAO userActivityDAO;
-	
-	private ConcurrentMap<Integer, ConcurrentMap<Integer, LocationData>> userActivityLocations = new ConcurrentHashMap<Integer, ConcurrentMap<Integer, LocationData>>();
+	//Map of Activity Id to Map of user id to useractivitylocation
+	private ConcurrentMap<Integer, ConcurrentMap<Integer, UserActivityLocationData>> userActivityLocations = new ConcurrentHashMap<Integer, ConcurrentMap<Integer, UserActivityLocationData>>();
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
@@ -152,24 +153,26 @@ public class ActivityService {
 	}
 	
 	
-	public void trackUserLocationForActivity(Integer activityId, LocationData location){
+	public void trackUserLocationForActivity(Integer activityId, UserActivityLocationData userActivityLocation){
 		
-		ConcurrentMap<Integer, LocationData> userLocations = this.userActivityLocations.get(activityId);
-		if(userLocations == null){
-			userLocations = new ConcurrentHashMap<Integer, LocationData>();
-			userActivityLocations.put(activityId, userLocations);
+		ConcurrentMap<Integer, UserActivityLocationData> userActivityLocations = this.userActivityLocations.get(activityId);
+		
+		if(userActivityLocations == null){
+			userActivityLocations = new ConcurrentHashMap<Integer, UserActivityLocationData>();
+			userActivityLocations.put(activityId, userActivityLocation);
 		}
-		userLocations.put(location.getUser().getId(), location);
+		userActivityLocations.put(userActivityLocation.getUserActivityData().getUser().getId(), userActivityLocation);
 	}
 	
-	public List<LocationData> getUsersLocationForActivity(Integer activityId){
+	public List<UserActivityLocationData> getUsersLocationForActivity(Integer activityId){
 		
-		ConcurrentMap<Integer, LocationData> userLocations = this.userActivityLocations.get(activityId);
-		if(userLocations == null) return null;
+		ConcurrentMap<Integer, UserActivityLocationData> userActivityLocations = this.userActivityLocations.get(activityId);
+		if(userActivityLocations == null) return null;
 		
-		Collection<LocationData> locations = userLocations.values();
+		Collection<UserActivityLocationData> locations = userActivityLocations.values();
 		if(locations == null) return null;
-		List<LocationData> list =  new ArrayList<LocationData>(locations);
+		
+		List<UserActivityLocationData> list =  new ArrayList<UserActivityLocationData>(locations);
 		return list;
 		
 	}
