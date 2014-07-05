@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -92,11 +93,13 @@ public class ActivityData {
 			this.createdBy = createdBy;
 		}
 		
-		@XmlType(namespace="activity", name = "status")
+		@XmlType(name = "status")
 		@XmlEnum
 		public enum Status{
 			
-			NOT_STARTED(0), RUNNING(1), STOP(2);
+			@XmlEnumValue("0")NOT_STARTED(0), 
+			@XmlEnumValue("1")RUNNING(1), 
+			@XmlEnumValue("2")STOP(2);
 			
 			private Integer val;
 			

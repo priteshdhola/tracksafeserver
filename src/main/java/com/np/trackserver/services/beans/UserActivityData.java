@@ -1,6 +1,7 @@
 package com.np.trackserver.services.beans;
 
 import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -68,11 +69,13 @@ public class UserActivityData {
 		this.pace = pace;
 	}
 
-	@XmlType(namespace="useractivity", name = "status")
+	@XmlType(name = "status")
 	@XmlEnum
 	public enum Status{
 		
-		NOT_STARTED(0), RUNNING(1), STOP(2);
+		@XmlEnumValue("0")NOT_STARTED(0), 
+		@XmlEnumValue("1")RUNNING(1), 
+		@XmlEnumValue("2")STOP(2);
 		
 		private Integer val;
 		
