@@ -1,6 +1,7 @@
 package com.np.trackserver.services.beans;
 
 import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -9,6 +10,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author npatel
  *
  */
+@XmlRootElement(name="userActivityData")
 public class UserActivityData {
 	
 	private UserData user;
