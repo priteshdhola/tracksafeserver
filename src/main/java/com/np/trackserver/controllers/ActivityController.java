@@ -67,7 +67,7 @@ public class ActivityController extends BaseController {
 	}
 	
 	@POST
-	@Path("/{activity_id}/updateStatus")
+	@Path("/{activity_id}/status/update")
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Response updateActivityStatus(@Context UriInfo uri, @Context HttpServletRequest req, @Context Response res, @PathParam("activity_id") Integer activityId,
