@@ -19,8 +19,7 @@ import com.np.trackserver.dao.ActivityDAO;
 import com.np.trackserver.dao.UserActivityDAO;
 import com.np.trackserver.dao.model.Activity;
 import com.np.trackserver.dao.model.UserActivity;
-import com.np.trackserver.services.beans.ActivityData;
-import com.np.trackserver.services.beans.UserActivityData;
+import com.np.trackserver.services.beans.Status;
 
 @Component
 public class ActivityStatusMonitor {
@@ -75,7 +74,7 @@ public class ActivityStatusMonitor {
 					}
 				}
 				
-				if(UserActivityData.Status.STOP.getValue().equals(dbUserActivity.getStatus())){
+				if(Status.STOP.getValue().equals(dbUserActivity.getStatus())){
 					
 					if(activitiesStatus.get(dbActivity) == null){
 						activitiesStatus.put(dbActivity, false);
@@ -94,7 +93,7 @@ public class ActivityStatusMonitor {
 				Boolean status = entry.getValue();
 				
 				if(!status){
-					activity.setStatus(ActivityData.Status.STOP.getValue());
+					activity.setStatus(Status.STOP.getValue());
 					activityDAO.update(activity);
 				}
 			}
@@ -105,7 +104,7 @@ public class ActivityStatusMonitor {
 				Boolean status = entry.getValue();
 				
 				if(!status){
-					userActivity.setStatus(UserActivityData.Status.STOP.getValue());
+					userActivity.setStatus(Status.STOP.getValue());
 					userActivityDAO.update(userActivity);
 				}
 			}

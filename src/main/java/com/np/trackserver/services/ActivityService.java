@@ -23,7 +23,7 @@ import com.np.trackserver.dao.model.User;
 import com.np.trackserver.dao.model.UserActivity;
 import com.np.trackserver.exceptions.NoResourceFoundException;
 import com.np.trackserver.services.beans.ActivityData;
-import com.np.trackserver.services.beans.LocationData;
+import com.np.trackserver.services.beans.Status;
 import com.np.trackserver.services.beans.UserActivityData;
 import com.np.trackserver.services.beans.UserActivityLocationData;
 import com.np.trackserver.services.beans.UserData;
@@ -126,7 +126,7 @@ public class ActivityService {
 		ua.setDistance(dbUserActivity.getDistance());
 		ua.setPace(dbUserActivity.getPace());
 		ua.setTime(dbUserActivity.getTime());
-		ua.setStatus(UserActivityData.Status.fromValue(dbUserActivity.getStatus()));
+		ua.setStatus(Status.fromValue(dbUserActivity.getStatus()));
 		
 		return ua;
 	}
@@ -140,7 +140,7 @@ public class ActivityService {
 		activityData.setStartDate(dbActivity.getStartDate());
 		activityData.setCreatedDate(dbActivity.getCreatedDate());
 		activityData.setCreatedBy(dbActivity.getCreatedBy());
-		activityData.setStatus(ActivityData.Status.fromValue(dbActivity.getStatus()));
+		activityData.setStatus(Status.fromValue(dbActivity.getStatus()));
 
         /*
 		if(dbUActivity != null){
