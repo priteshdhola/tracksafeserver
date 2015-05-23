@@ -13,3 +13,4 @@ trackSafeServer.iml
 /bin
 .DS_Store
 src/.DS_Store
+/.settings/

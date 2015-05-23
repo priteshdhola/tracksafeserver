@@ -1,0 +1,40 @@
+<settings>
+  <pluginGroups>
+    <pluginGroup>com.atlassian.maven.plugins</pluginGroup>
+  </pluginGroups>
+  <profiles>
+    <profile>
+      <id>generic</id>
+      <!--Enable snapshots for the built in central repo to direct -->
+      <!--all requests to nexus via the mirror -->
+      <repositories>
+        <repository>
+          <id>central</id>
+          <url>http://repo1.maven.org/maven2</url>
+          <releases><enabled>true</enabled><updatePolicy>always</updatePolicy></releases>
+          <snapshots><enabled>true</enabled><updatePolicy>always</updatePolicy></snapshots>
+        </repository>
+	<repository>
+	      <id>java.net</id>
+	      <url>https://maven.java.net/content/repositories/public/</url>
+	</repository>
+        <repository>
+		<id>JBoss repository</id>
+		<url>http://repository.jboss.org/nexus/content/groups/public/</url>
+      	</repository>
+      </repositories>
+     <pluginRepositories>
+        <pluginRepository>
+          <id>central</id>
+          <url>https://repo1.maven.org/maven2</url>
+          <releases><enabled>true</enabled><updatePolicy>always</updatePolicy></releases>
+          <snapshots><enabled>true</enabled><updatePolicy>always</updatePolicy></snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <!--make the profile active all the time -->
+    <activeProfile>generic</activeProfile>
+  </activeProfiles>
+</settings>
