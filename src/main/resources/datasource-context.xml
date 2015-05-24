@@ -16,7 +16,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	<tx:annotation-driven/>
 	<!-- Database connection pool -->
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <!-- bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
     	<property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <property name="url" value="${database.url}" />
         <property name="username" value="${database.username}" />    
@@ -26,11 +26,10 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
         <property name="minIdle" value="0" />    
         <property name="maxIdle" value="8" />    
         <property name="maxActive" value="100" />
-        <!--  property name="maxWait" value="10000"/ -->
         <property name="removeAbandoned" value="true"/>
         <property name="removeAbandonedTimeout" value="300"/>
         <property name="logAbandoned" value="true"/>
-    </bean>
+    </bean -->
 
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"/>
