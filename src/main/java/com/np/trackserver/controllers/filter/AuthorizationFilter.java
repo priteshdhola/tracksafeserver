@@ -17,10 +17,8 @@ import org.springframework.stereotype.Controller;
 
 import com.np.trackserver.services.beans.UserData;
 
-@Controller
 public class AuthorizationFilter implements Filter {
 	
-
 	private static final Logger logger = Logger.getLogger(AuthorizationFilter.class);
 
 	public void init(FilterConfig filterConfig) throws ServletException {}

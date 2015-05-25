@@ -26,16 +26,24 @@
 	<tx:annotation-driven />
 	<!-- enabling annotaion based task scheduling  -->
 	<task:annotation-driven/>
-	
+	<context:annotation-config/>  
+    
 	<import resource="classpath:datasource-context.xml"/>
 	<import resource="classpath:springmvc-resteasy.xml"/>
-	<import resource="classpath:root-context.xml"/>
 	
-	<context:component-scan base-package="com.np.trackserver"  scoped-proxy="targetClass" />
+	 <!-- context:component-scan base-package="com.np.trackserver"    scoped-proxy="targetClass" / -->
+    <!-- bean id="authorizationFilter" class="com.np.trackserver.controllers.filter.AuthorizationFilter" autowire="byName" / -->
+    
+	<!-- Load the resource bundle to a message source -->
+	<bean name="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+    	<property name="basename">
+        	<value>locale/messages</value>
+    	</property>
+	</bean>
 	
 	<!--  bean id="trackServer" class="com.np.trackserver.server.TrackServer"/ -->
 	<bean id="trackServerApplicationContext" class="com.np.trackserver.server.TrackServerApplicationContext" />
-	<bean id="restServer" class="com.strategicgains.restexpress.RestExpress"/>
+	<!-- bean id="restServer" class="com.strategicgains.restexpress.RestExpress"/ -->
 	
 	<!-- an HTTP Session-scoped bean exposed as a proxy -->
 	<!-- bean id="userData" class="com.np.trackserver.services.beans.UserData">

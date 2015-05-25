@@ -14,3 +14,4 @@ trackSafeServer.iml
 .DS_Store
 src/.DS_Store
 /.settings/
+/logs/

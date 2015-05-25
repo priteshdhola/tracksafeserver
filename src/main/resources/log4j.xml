@@ -12,7 +12,7 @@
 	</appender>
 	
 	<appender name="TrackServer" class="org.apache.log4j.RollingFileAppender"> 
-	    <param name="file" value="${catalina.base}/logs/trackserver.log"/>
+	    <param name="file" value="logs/trackserver.log"/>
 	    <param name="append" value="true" />
 		<param name="encoding" value="UTF-8" />
 	    <param name="MaxFileSize" value="10240KB"/>	
